@@ -1,8 +1,8 @@
 {
   "name": "sfs4900",
   "version": "1.0.0",
-  "description": "Romanization of russian to finnish as defined in SFS-4900 standard",
-  "main": "lib/index.js",
+  "description": "Transliteration from russian text to finnish as defined in SFS-4900 standard",
+  "main": "lib/transliteration.js",
   "scripts": {
     "prepublish": "babel src --out-dir lib",
     "test": "npm run lint && npm run test:unit",
