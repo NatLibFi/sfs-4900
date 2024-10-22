@@ -12,81 +12,81 @@ const characters = [
 ];
 
 const map = {
-  'А': 'A',
+  'А': 'A', // Both
   'а': 'a',
-  'Б': 'B',
+  'Б': 'B', // Both
   'б': 'b',
-  'В': 'V',
+  'В': 'V', // Both
   'в': 'v',
-  'Г': 'G',
+  'Г': 'G', // rus, ukr h, Ґ ґ	g
   'г': 'g',
-  'Д': 'D',
+  'Д': 'D', // both
   'д': 'd',
-/*'Е': 'E',
+/*'Е': 'E', // UKR is simpler
   'е': 'e',
   'E': 'Je',
   'e': 'je',*/
-/*'Ё': 'O',
+/*'Ё': 'O', // RUS only
   'ё': 'o',
   'Ё': 'Jo',
   'ё': 'jo',*/
-  'Ж': 'Ž',
+  'Ж': 'Ž', // Both
   'ж': 'ž',
-  'З': 'Z',
+  'З': 'Z', // Both
   'з': 'z',
-/*'И': 'I',
+/*'И': 'I', // UKR: 'y'
   'и': 'i',
   'И': 'Ji',
   'и': 'ji',*/
-/*'Й': 'I',
+/*'Й': 'I', // RUS and UKR differ
   'й': 'i',
   'Й': 'J',
   'й': 'j',
   'Й': '',
   'й': '',*/
-  'К': 'K',
+  'К': 'K', // both
   'к': 'k',
-  'Л': 'L',
+  'Л': 'L', // both
   'л': 'l',
-  'М': 'M',
+  'М': 'M', // both
   'м': 'm',
-  'Н': 'N',
+  'Н': 'N', // both
   'н': 'n',
-  'О': 'O',
+  'О': 'O', // both
   'о': 'o',
-  'П': 'P',
+  'П': 'P', // both
   'п': 'p',
-  'Р': 'R',
+  'Р': 'R', // both
   'р': 'r',
-  'С': 'S',
+  'С': 'S', // both
   'с': 's',
-  'Т': 'T',
+  'Т': 'T', // both
   'т': 't',
-  'У': 'U',
+  'У': 'U', // both
   'у': 'u',
-  'Ф': 'F',
+  'Ф': 'F', // both
   'ф': 'f',
-  'Х': 'H',
+  'Х': 'H', // UKR: h’
   'х': 'h',
-  'Ц': 'Ts',
+  'Ц': 'Ts', // both
   'ц': 'ts',
-  'Ч': 'Tš',
+  'Ч': 'Tš', // both
   'ч': 'tš',
-  'Ш': 'Š',
+  'Ш': 'Š', // both
   'ш': 'š',
-  'Щ': 'Štš',
+  'Щ': 'Štš', // both
   'щ': 'štš',
-  'Ъ': '',
+  'Ъ': '', // both (UKR: no longer used)
   'ъ': '',
-  'Ы': 'Y',
+  'Ы': 'Y', // RUS onlt
   'ы': 'y',
-  'Ь': '',
+  'Ь': '', // both
   'ь': '',
-  'Э': 'E',
+  'Э': 'E', // RUS only
   'э': 'e',
-  'Ю': 'Ju',
+  'Ю': 'Ju', // Both
   'ю': 'ju',
-  'Я': 'Ja',
+  'Я': 'Ja', // RUS only
   'я': 'ja'
 };
 
@@ -100,38 +100,44 @@ function createConverter(word) {
     const isFirstCharacter = i === 0 || !characters.some(c => c === previousCharacter);
     const isLastCharacter = i === word.length-1 || !characters.some(c => c === nextCharacter);
 
-    if (char === 'Е' && isConsonant(previousCharacter)) return 'E';
-    if (char === 'е' && isConsonant(previousCharacter)) return 'e';
+    if (['Е', 'е'].includes(char)) {
+      if (isConsonant(previousCharacter)) {
+        if (['Ъ','Ь','ъ','ь'].includes(previousCharacter)) {
+          return 'Е' === char ? 'Je' : 'je';
+        }
+        return 'Е' === char ? 'E' : 'e';
+      }
 
-    if (char === 'Е' && isFirstCharacter) return 'Je';
-    if (char === 'е' && isFirstCharacter) return 'je';
+      //if (isFirstCharacter || ['Ъ','Ь','ъ','ь'].includes(previousCharacter) || !isConsonant(previousCharacter)) {
+      return 'Е' === char ? 'Je' : 'je';
+    }
 
-    if (char === 'Е' && ['Ъ','Ь','ъ','ь'].some(c => c === previousCharacter)) return 'Je';
-    if (char === 'е' && ['Ъ','Ь','ъ','ь'].some(c => c === previousCharacter)) return 'je';
+    if (['Ё', 'ё'].includes(char)) {
+      if (['ж', 'ч', 'ш', 'щ', 'Ж', 'Ч', 'Ш', 'Щ'].includes(previousCharacter)) {
+        return previousCharacter === 'Ё' ? 'O' : 'o';
+      }
+      return previousCharacter === 'Ё' ? 'Jo' : 'jo';
+    }
 
-    if (char === 'Е' && !isConsonant(previousCharacter)) return 'Je';
-    if (char === 'е' && !isConsonant(previousCharacter)) return 'je';
+    if (['И', 'и'].includes(char)) {
+      if (['Ь','ь'].includes(previousCharacter)) {
+        return char === 'И' ? 'Ji' : 'ji';
+      }
+      return char === 'И' ? 'I' : 'i';
+    }
 
-    if (char === 'Ё' && ['ж', 'ч', 'ш', 'щ', 'Ж', 'Ч', 'Ш', 'Щ'].some(c => c === previousCharacter)) return 'O';
-    if (char === 'ё' && ['ж', 'ч', 'ш', 'щ', 'Ж', 'Ч', 'Ш', 'Щ'].some(c => c === previousCharacter)) return 'o';
-    if (char === 'Ё') return 'Jo';
-    if (char === 'ё') return 'jo';
+    if (['Й', 'й'].includes(char)) {
+      if (isLastCharacter && ['и', 'И'].includes(previousCharacter)) {
+        return '';
+      }
 
-    if (char === 'И' && ['Ь','ь'].some(c => c === previousCharacter)) return 'Ji';
-    if (char === 'и' && ['Ь','ь'].some(c => c === previousCharacter)) return 'ji';
-    if (char === 'И') return 'I';
-    if (char === 'и') return 'i';
+      if (isFirstCharacter || ['и', 'И'].includes(previousCharacter)) {
+        return char === 'Й' ? 'J' : 'j';
+      }
+ 
 
-    if (char === 'Й' && ['и', 'И'].some(c => c === previousCharacter) && isLastCharacter) return '';
-    if (char === 'й' && ['и', 'И'].some(c => c === previousCharacter) && isLastCharacter) return '';
-
-    if (char === 'Й' && isFirstCharacter) return 'J';
-    if (char === 'й' && isFirstCharacter) return 'j';
-    if (char === 'Й' && ['и', 'И'].some(c => c === previousCharacter)) return 'J';
-    if (char === 'й' && ['и', 'И'].some(c => c === previousCharacter)) return 'j';
-
-    if (char === 'Й') return 'I';
-    if (char === 'й') return 'i';
+      return char === 'Й' ? 'I' : 'i';
+    }
 
     const converted = map[char];
 
@@ -160,5 +166,5 @@ export function convertToLatin(word) {
 }
 
 function isConsonant(char) {
-  return consonants.some(c => c === char);
+  return consonants.includes(char);
 }
