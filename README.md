@@ -32,13 +32,13 @@ console.log(ukrainianConversion);
 /* prints:
 {
  'from': 'Гоголь',
- 'result': 'Hogol',
+ 'result': 'Hohol',
  'warnings': []
 }
 */
 ```
 
-Warnings include notes on characters that were not converted. 
+Warnings include notes on characters that were not converted.
 
 ## See also
 
