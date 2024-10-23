@@ -1,4 +1,4 @@
-# Transliteration from russian text to finnish as defined in SFS-4900 standard
+# Transliteration from Russian and Ukranian texts to Finnish as defined in SFS-4900 standard
 
 ## Installation
 
@@ -11,13 +11,28 @@ npm install sfs4900
 ```
 var converter = require('sfs4900');
 
-var conversion = converter.convertToLatin('Чайковский');
+var conversion = converter.convertToLatin('Чайковский, Гоголь'); // defaults to russian
+
+// Second argument can be used to specify language code: 'rus' or 'ukr':
+var ukrainianConversion = converter.convertToLatin('Гоголь', 'ukr');
+
+
 
 console.log(conversion);
 /* prints:
 {
- 'from': 'Чайковский',
- 'result': 'Tšaikovski',
+ 'from': 'Чайковский, Гоголь',
+ 'result': 'Tšaikovski, Gogol',
+ 'warnings': []
+}
+*/
+
+
+console.log(ukrainianConversion);
+/* prints:
+{
+ 'from': 'Гоголь',
+ 'result': 'Hogol',
  'warnings': []
 }
 */
