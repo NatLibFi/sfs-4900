@@ -1,154 +1,210 @@
+// Based on https://fi.wikipedia.org/wiki/Ven%C3%A4j%C3%A4n_translitterointi and https://fi.wikipedia.org/wiki/Ukrainan_translitterointi
 
-const consonants = [
-  'б', 'в', 'г', 'д', 'ж', 'з', 'к', 'л', 'м', 'н', 'п', 'р', 'с', 'т', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 
-  'Б', 'В', 'Г', 'Д', 'Ж', 'З', 'К', 'Л', 'М', 'Н', 'П', 'Р', 'С', 'Т', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ'
-];
+const consonants = ['б', 'в', 'г', 'ґ', 'д', 'ж', 'з', 'к', 'л', 'м', 'н', 'п', 'р', 'с', 'т', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'Б', 'В', 'Г', 'Ґ', 'Д', 'Ж', 'З', 'К', 'Л', 'М', 'Н', 'П', 'Р', 'С', 'Т', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ'];
 
-const characters = [
-  'А', 'а', 'Б', 'б', 'В', 'в', 'Г', 'г', 'Д', 'д', 'Е', 'е', 'E', 'e', 'Ё', 'ё', 'Ё', 'ё', 'Ж', 
-  'ж', 'З', 'з', 'И', 'и', 'И', 'и', 'Й', 'й', 'Й', 'й', 'Й', 'й', 'К', 'к', 'Л', 'л', 'М', 'м', 
-  'Н', 'н', 'О', 'о', 'П', 'п', 'Р', 'р', 'С', 'с', 'Т', 'т', 'У', 'у', 'Ф', 'ф', 'Х', 'х', 'Ц', 
-  'ц', 'Ч', 'ч', 'Ш', 'ш', 'Щ', 'щ', 'Ъ', 'ъ', 'Ы', 'ы', 'Ь', 'ь', 'Э', 'э', 'Ю', 'ю', 'Я', 'я'
-];
+const characters = ['А', 'а', 'Б', 'б', 'В', 'в', 'Г', 'г', 'Ґ', 'ґ', 'Д', 'д', 'Е', 'е', 'E', 'e', 'Ё', 'ё', 'Ё', 'ё', 'Є', 'є', 'Ж', 'ж', 'З', 'з', 'И', 'и', 'И', 'и', 'І', 'і', 'Ї', 'ї', 'Й', 'й', 'Й', 'й', 'Й', 'й', 'К', 'к', 'Л', 'л', 'М', 'м', 'Н', 'н', 'О', 'о', 'П', 'п', 'Р', 'р', 'С', 'с', 'Т', 'т', 'У', 'у', 'Ф', 'ф', 'Х', 'х', 'Ц', 'ц', 'Ч', 'ч', 'Ш', 'ш', 'Щ', 'щ', 'Ъ', 'ъ', 'Ы', 'ы', 'Ь', 'ь', 'Э', 'э', 'Ю', 'ю', 'Я', 'я', '’'];
 
 const map = {
-  'А': 'A', 
+  'А': 'A', // Both
   'а': 'a',
-  'Б': 'B', 
+  'Б': 'B', // Both
   'б': 'b',
-  'В': 'V', 
+  'В': 'V', // Both
   'в': 'v',
-  'Г': 'G', 
+  'Г': 'G', // rus, ukr h, Ґ ґ g, see code
   'г': 'g',
-  'Д': 'D', 
+  'Ґ': 'G', // UKR-only
+  'ґ': 'g',
+  'Д': 'D', // both
   'д': 'd',
-/*'Е': 'E', 
-  'е': 'e',
-  'E': 'Je', 
-  'e': 'je',*/
-/*'Ё': 'O', 
-  'ё': 'o',
-  'Ё': 'Jo', 
-  'ё': 'jo',*/
-  'Ж': 'Ž', 
+  // 'Е': 'E', // UKR is simpler
+  // 'е': 'e',
+  // 'E': 'Je',
+  // 'e': 'je',
+  // 'Ё': 'O', // RUS only
+  // 'ё': 'o',
+  // 'Ё': 'Jo',
+  // 'ё': 'jo',
+  'Є': 'Je', // UKR only
+  'є': 'je',
+  'Ж': 'Ž', // Both
   'ж': 'ž',
-  'З': 'Z', 
+  'З': 'Z', // Both
   'з': 'z',
-/*'И': 'I', 
+  'И': 'I', // RUS: 'i'/'ji'. UKR: 'y'. Default to 'i'
   'и': 'i',
-  'И': 'Ji', 
-  'и': 'ji',*/
-/*'Й': 'I', 
+  //'И': 'Ji',
+  //'и': 'ji',*/
+  'І': 'I', // UKR only
+  'і': 'i',
+  'Ї': 'Ji', // UKR only
+  'ї': 'ji',
+  'Й': 'I', // RUS and UKR both map to 'i'/'j'/'', but the rules differ slightly. Map to I/i by default
   'й': 'i',
-  'Й': 'J', 
-  'й': 'j',
-  'Й': '', 
-  'й': '',*/
-  'К': 'K', 
+  //'Й': 'J',
+  //'й': 'j',
+  //'Й': '',
+  //'й': '',
+  'К': 'K', // both
   'к': 'k',
-  'Л': 'L', 
+  'Л': 'L', // both
   'л': 'l',
-  'М': 'M', 
+  'М': 'M', // both
   'м': 'm',
-  'Н': 'N', 
+  'Н': 'N', // both
   'н': 'n',
-  'О': 'O', 
+  'О': 'O', // both
   'о': 'o',
-  'П': 'P', 
+  'П': 'P', // both
   'п': 'p',
-  'Р': 'R', 
+  'Р': 'R', // both
   'р': 'r',
-  'С': 'S', 
+  'С': 'S', // both
   'с': 's',
-  'Т': 'T', 
+  'Т': 'T', // both
   'т': 't',
-  'У': 'U', 
+  'У': 'U', // both
   'у': 'u',
-  'Ф': 'F', 
+  'Ф': 'F', // both
   'ф': 'f',
-  'Х': 'H', 
+  'Х': 'H', // UKR: h’
   'х': 'h',
-  'Ц': 'Ts', 
+  'Ц': 'Ts', // both
   'ц': 'ts',
-  'Ч': 'Tš', 
+  'Ч': 'Tš', // both
   'ч': 'tš',
-  'Ш': 'Š', 
+  'Ш': 'Š', // both
   'ш': 'š',
-  'Щ': 'Štš', 
+  'Щ': 'Štš', // both
   'щ': 'štš',
-  'Ъ': '', 
+  'Ъ': '', // both (UKR: no longer used)
   'ъ': '',
-  'Ы': 'Y', 
+  'Ы': 'Y', // RUS onlt
   'ы': 'y',
-  'Ь': '', 
+  'Ь': '', // both
   'ь': '',
-  'Э': 'E', 
+  'Э': 'E', // RUS only
   'э': 'e',
-  'Ю': 'Ju', 
+  'Ю': 'Ju', // Both
   'ю': 'ju',
-  'Я': 'Ja', 
-  'я': 'ja'
+  'Я': 'Ja', // Both
+  'я': 'ja',
+  '’': '' // UKR only
 };
 
-function createConverter(word) {
+function createConverter(word, lang = 'rus') { // lang: 'rus' and 'ukr' supported
   const warnings = [];
+  console.log(`LANG: ${lang}`); // eslint-disable-line no-console
 
-  function convertCharacter(char, i) {
-    const previousCharacter = word[i-1];
-    const nextCharacter = word[i+1];
-
-    const isFirstCharacter = i === 0 || !characters.some(c => c === previousCharacter);
-    const isLastCharacter = i === word.length-1 || !characters.some(c => c === nextCharacter);
-
-    if (char === 'Е' && isConsonant(previousCharacter)) return 'E';
-    if (char === 'е' && isConsonant(previousCharacter)) return 'e';
-    
-    if (char === 'Е' && isFirstCharacter) return 'Je';
-    if (char === 'е' && isFirstCharacter) return 'je';
-    
-    if (char === 'Е' && ['Ъ','Ь','ъ','ь'].some(c => c === previousCharacter)) return 'Je';
-    if (char === 'Е' && ['Ъ','Ь','ъ','ь'].some(c => c === previousCharacter)) return 'je';
-
-    if (char === 'Е' && !isConsonant(previousCharacter)) return 'Je';
-    if (char === 'е' && !isConsonant(previousCharacter)) return 'je';
-    
-    if (char === 'Ё' && ['ж', 'ч', 'ш', 'щ', 'Ж', 'Ч', 'Ш', 'Щ'].some(c => c === previousCharacter)) return 'O';
-    if (char === 'ё' && ['ж', 'ч', 'ш', 'щ', 'Ж', 'Ч', 'Ш', 'Щ'].some(c => c === previousCharacter)) return 'o';
-    if (char === 'Ё') return 'Jo';
-    if (char === 'ё') return 'jo';
-
-    if (char === 'И' && ['Ь','ь'].some(c => c === previousCharacter)) return 'Ji';
-    if (char === 'и' && ['Ь','ь'].some(c => c === previousCharacter)) return 'ji';
-    if (char === 'И') return 'I';
-    if (char === 'и') return 'i';
-
-    if (char === 'Й' && ['и', 'И'].some(c => c === previousCharacter) && isLastCharacter) return '';
-    if (char === 'й' && ['и', 'И'].some(c => c === previousCharacter) && isLastCharacter) return '';
-
-    if (char === 'Й' && isFirstCharacter) return 'J';
-    if (char === 'й' && isFirstCharacter) return 'j';
-    if (char === 'Й' && ['и', 'И'].some(c => c === previousCharacter)) return 'J';
-    if (char === 'й' && ['и', 'И'].some(c => c === previousCharacter)) return 'j';
-
-    if (char === 'Й') return 'I';
-    if (char === 'й') return 'i';
-
-    const converted = map[char];
-
-    if(converted === undefined) {
-      warnings.push(`Character ${char} at position ${i} was not cyrillic.`);
+  function eOrJe(char, previousCharacter) {
+    if (lang === 'ukr') {
+      return char === 'Е' ? 'E' : 'e';
+    }
+    if (isConsonant(previousCharacter)) {
+      if (['Ъ', 'Ь', 'ъ', 'ь'].includes(previousCharacter)) {
+        return char === 'Е' ? 'Je' : 'je';
+      }
+      return char === 'Е' ? 'E' : 'e';
     }
 
-    return converted !== undefined ? converted : char;
+    //if (isFirstCharacter || ['Ъ','Ь','ъ','ь'].includes(previousCharacter) || !isConsonant(previousCharacter)) {
+    return char === 'Е' ? 'Je' : 'je';
   }
+
+  function gOrH(char) {
+    if (lang === 'ukr') {
+      return char === 'Г' ? 'H' : 'h';
+    }
+
+    return char === 'Г' ? 'G' : 'g';
+  }
+  function iOrJ(char, previousCharacter, isFirstCharacter, isLastCharacter) {
+    if (isFirstCharacter) { // Both RUS and UKR
+      return char === 'Й' ? 'J' : 'j';
+    }
+
+    if (lang === 'ukr' && ['І', 'і'].includes(previousCharacter)) {
+      if (isLastCharacter) {
+        return '';
+      }
+      return char === 'Й' ? 'J' : 'j';
+    }
+    if (lang === 'rus' && ['и', 'И'].includes(previousCharacter)) {
+      if (isLastCharacter) {
+        return '';
+      }
+      return char === 'Й' ? 'J' : 'j';
+    }
+    return char === 'Й' ? 'I' : 'i';
+  }
+
+  function convertCharacter(char, i) {
+    const previousCharacter = word[i - 1];
+    const nextCharacter = word[i + 1];
+
+    const isFirstCharacter = i === 0 || !characters.some(c => c === previousCharacter);
+
+    if (['Г', 'г'].includes(char)) { // 'gogol' vs 'hohol'
+      return gOrH(char);
+    }
+
+    if (['Е', 'е'].includes(char)) {
+      return eOrJe(char, previousCharacter);
+    }
+
+    if (['Ё', 'ё'].includes(char)) { // RUS only
+      if (['ж', 'ч', 'ш', 'щ', 'Ж', 'Ч', 'Ш', 'Щ'].includes(previousCharacter)) {
+        return previousCharacter === 'Ё' ? 'O' : 'o';
+      }
+      return previousCharacter === 'Ё' ? 'Jo' : 'jo';
+    }
+
+    if (['И', 'и'].includes(char)) {
+      if (lang === 'ukr') {
+        return char === 'И' ? 'Y' : 'y';
+      }
+      if (['Ь', 'ь'].includes(previousCharacter)) {
+        return char === 'И' ? 'Ji' : 'ji';
+      }
+      return char === 'И' ? 'I' : 'i';
+    }
+
+    if (['Й', 'й'].includes(char)) {
+      const isLastCharacter = i === word.length - 1 || !characters.some(c => c === nextCharacter);
+      return iOrJ(char, previousCharacter, isFirstCharacter, isLastCharacter);
+    }
+
+    if (lang === 'ukr') {
+      if (char === 'Х') {
+        return 'H\'';
+      }
+      if (char === 'х') {
+        return 'h\'';
+      }
+    }
+
+    return convertCharacter2();
+
+    function convertCharacter2() {
+      const converted = map[char];
+
+      if (converted === undefined) {
+        warnings.push(`Character ${char} at position ${i} was not cyrillic.`); // eslint-disable-line functional/immutable-data
+        return char;
+      }
+
+      return converted;
+    }
+  }
+
   return {
-    warnings: warnings,
-    convertCharacter: convertCharacter
+    warnings,
+    convertCharacter
   };
 }
 
-export function convertToLatin(word) {
-  const converter = createConverter(word);
+export function convertToLatin(word, lang = 'rus') {
+  const converter = createConverter(word, lang);
 
   const convertedWord = word.split('').map(converter.convertCharacter).join('');
 
@@ -160,5 +216,5 @@ export function convertToLatin(word) {
 }
 
 function isConsonant(char) {
-  return consonants.some(c => c === char);
+  return consonants.includes(char);
 }
