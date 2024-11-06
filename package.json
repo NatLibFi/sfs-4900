@@ -1,6 +1,6 @@
 {
   "name": "@natlibfi/sfs-4900",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "description": "Transliteration from cyrillic (Russian, Ukrainian) text to latin (Finnish) as defined in the SFS-4900 standard",
   "author": "The National Library of Finland",
