@@ -1,15 +1,15 @@
-# Transliteration from Russian and Ukranian texts to Finnish as defined in SFS-4900 standard
+# SFS 4900 based transliteration from Russian and Ukranian to Finnish
 
 ## Installation
 
 ```
-npm install sfs4900
+npm install sfs-4900
 ```
 
 ## Usage
 
 ```
-var converter = require('sfs4900');
+var converter = require('sfs-4900');
 
 var conversion = converter.convertToLatin('Чайковский, Гоголь'); // defaults to russian
 
@@ -42,4 +42,6 @@ Warnings include notes on characters that were not converted.
 
 ## See also
 
-https://fi.wikipedia.org/wiki/Ven%C3%A4j%C3%A4n_translitterointi
+- https://fi.wikipedia.org/wiki/Ven%C3%A4j%C3%A4n_translitterointi
+
+- https://fi.wikipedia.org/wiki/Ukrainan_translitterointi
