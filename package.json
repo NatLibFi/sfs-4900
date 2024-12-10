@@ -48,19 +48,21 @@
     "cover:report": "nyc report"
   },
   "devDependencies": {
-    "@babel/cli": "^7.25.9",
+    "@babel/cli": "^7.26.4",
     "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
     "@natlibfi/eslint-config-melinda-backend": "^3.0.5",
-    "@natlibfi/fixugen": "^2.0.10",
-    "@natlibfi/fixura": "^3.0.10",
+    "@natlibfi/fixugen": "^2.0.12",
+    "@natlibfi/fixura": "^3.0.11",
     "babel-plugin-istanbul": "^7.0.0",
     "chai": "^4.5.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.1",
-    "mocha": "^10.8.2",
-    "nyc": "^17.1.0"
+    "mocha": "^11.0.1",
+    "nyc": "^17.1.0",
+    "@jridgewell/gen-mapping": "0.3.5"
   },
+  "nvolkComment": "@jridgewell/gen-mapping 0.3.6 seems to break things. Remove whole gen-mapping dev dependency after 0.3.7 appears",
   "eslintConfig": {
     "extends": [
       "@natlibfi/melinda-backend"
