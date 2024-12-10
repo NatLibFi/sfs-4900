@@ -94,7 +94,7 @@ const map = {
 
 function createConverter(word, lang = 'rus') { // lang: 'rus' and 'ukr' supported
   const warnings = [];
-  console.log(`LANG: ${lang}`); // eslint-disable-line no-console
+  //console.log(`LANG: ${lang}`); // eslint-disable-line no-console
 
   function eOrJe(char, previousCharacter) {
     if (lang === 'ukr') {
