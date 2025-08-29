@@ -18,16 +18,12 @@ jobs:
 
     steps:
     - name: Checkout the code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-      env:
-        NPM_CONFIG_IGNORE_SCRIPTS: true
-        MONGOMS_DOWNLOAD_URL: https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel80-7.0.12.tgz
-        MONGOMS_VERSION: 7.0.12
     - run: npm i -g npm@latest
     - run: npm audit --package-lock-only --production --audit-level=high
     - run: npm i
@@ -41,7 +37,7 @@ jobs:
 
     steps:
     - name: Checkout the code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: nodejsscan scan
       id: njsscan
       uses: ajinabraham/njsscan-action@master
@@ -54,7 +50,7 @@ jobs:
     container: node:18
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: mikaelvesavuori/license-compliance-action@v1
         with:
           exclude_pattern: /^@natlibfi/
@@ -67,9 +63,9 @@ jobs:
     if: contains(github.ref, 'refs/tags/')
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       # Setup .npmrc file to publish to npm
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '22.x'
           registry-url: 'https://registry.npmjs.org'
