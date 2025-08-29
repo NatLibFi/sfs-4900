@@ -33,7 +33,7 @@ jobs:
   njsscan:
     name: Njsscan-check
     runs-on: ubuntu-latest
-    container: node:18
+    container: node:22
 
     steps:
     - name: Checkout the code
@@ -47,7 +47,7 @@ jobs:
   license-scan:
     name: License compliance check
     runs-on: ubuntu-latest
-    container: node:18
+    container: node:22
 
     steps:
       - uses: actions/checkout@v5
@@ -58,7 +58,7 @@ jobs:
   publish:
     name: Npm publishing
     runs-on: ubuntu-latest
-    container: node:18
+    container: node:22
     needs: [build-node-versions, njsscan]
     if: contains(github.ref, 'refs/tags/')
 
