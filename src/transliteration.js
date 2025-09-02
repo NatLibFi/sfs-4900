@@ -189,7 +189,7 @@ function createConverter(word, lang = 'rus') { // lang: 'rus' and 'ukr' supporte
       const converted = map[char];
 
       if (converted === undefined) {
-        warnings.push(`Character ${char} at position ${i} was not cyrillic.`); // eslint-disable-line functional/immutable-data
+        warnings.push(`Character ${char} at position ${i} was not cyrillic.`);
         return char;
       }
 

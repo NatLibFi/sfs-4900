@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -24,10 +24,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-      env:
-        NPM_CONFIG_IGNORE_SCRIPTS: true
-        MONGOMS_DOWNLOAD_URL: https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel80-7.0.12.tgz
-        MONGOMS_VERSION: 7.0.12
     - run: npm i -g npm@latest
     - run: npm audit --package-lock-only --production --audit-level=high
     - run: npm i
@@ -37,7 +33,7 @@ jobs:
   njsscan:
     name: Njsscan-check
     runs-on: ubuntu-latest
-    container: node:18
+    container: node:20
 
     steps:
     - name: Checkout the code
@@ -51,7 +47,7 @@ jobs:
   license-scan:
     name: License compliance check
     runs-on: ubuntu-latest
-    container: node:18
+    container: node:20
 
     steps:
       - uses: actions/checkout@v4
@@ -62,7 +58,7 @@ jobs:
   publish:
     name: Npm publishing
     runs-on: ubuntu-latest
-    container: node:18
+    container: node:20
     needs: [build-node-versions, njsscan]
     if: contains(github.ref, 'refs/tags/')
 
@@ -71,9 +67,9 @@ jobs:
       # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.MELINDA_RECORD_IMPORT_COMMONS_JS_NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.SFS4900_NPM_TOKEN }}
