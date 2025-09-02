@@ -28,7 +28,7 @@
   },
   "main": "dist/transliteration.js",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "publishConfig": {
     "access": "public"
@@ -48,17 +48,16 @@
     "cover:report": "nyc report"
   },
   "devDependencies": {
-    "@babel/cli": "^7.26.4",
-    "@babel/core": "^7.26.0",
-    "@babel/preset-env": "^7.26.0",
-    "@natlibfi/eslint-config-melinda-backend": "^3.0.5",
-    "@natlibfi/fixugen": "^2.0.12",
-    "@natlibfi/fixura": "^3.0.11",
+    "@babel/cli": "^7.28.3",
+    "@babel/core": "^7.28.3",
+    "@babel/preset-env": "^7.28.3",
+    "@natlibfi/fixugen": "^2.0.15",
+    "@natlibfi/fixura": "^3.0.14",
     "babel-plugin-istanbul": "^7.0.0",
     "chai": "^4.5.0",
     "cross-env": "^7.0.3",
-    "eslint": "^8.57.1",
-    "mocha": "^11.0.1",
+    "eslint": "^9.34.0",
+    "mocha": "^11.7.2",
     "nyc": "^17.1.0"
   },
   "eslintConfig": {
