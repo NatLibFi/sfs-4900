@@ -4,6 +4,10 @@ name: Melinda-node-tests
 
 on: push
 
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   build-node-versions:
     name: Node version matrix
@@ -20,7 +24,7 @@ jobs:
     - name: Checkout the code
       uses: actions/checkout@v5
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
@@ -65,11 +69,20 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       # Setup .npmrc file to publish to npm
-      - uses: actions/setup-node@v4
+      - name: Prepare node for publish
+        uses: actions/setup-node@v6
         with:
           node-version: '22.x'
           registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.SFS4900_NPM_TOKEN }}
+      - name: Update npm
+        run: npm install -g npm@latest
+      - name: Clean install
+        run: npm ci
+      # Publish stable release with --tag latest
+      - name: Publish stable release
+        if: ${{!contains(github.ref, '-alpha')}}
+        run: npm publish --tag=latest
+      # Publish pre-release without --tag latest
+      - name: Publish pre-release
+        if: contains(github.ref, '-alpha')
+        run: npm publish --tag=next

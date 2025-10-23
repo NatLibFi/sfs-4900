@@ -19,13 +19,12 @@
     "Finnish",
     "transliteration"
   ],
-  "homepage": "https://github.com/NatLibFi/sfs-4900",
+  "homepage": "https://www.npmjs.com/package/@natlibfi/sfs-4900",
   "bugs": {
     "url": "https://github.com/NatLibFi/sfs-4900/issues"
   },
   "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/natlibfi/sfs-4900.git"
+    "url": "https://github.com/NatLibFi/sfs-4900"
   },
   "main": "dist/transliteration.js",
   "engines": {
@@ -44,8 +43,8 @@
     "dev:test": "cross-env DEBUG=@natlibfi/* NODE_ENV=test node --watch --test --experimental-test-coverage --test-reporter=spec './src/*.test.js' './src/**/*.test.js'"
   },
   "devDependencies": {
-    "@natlibfi/fixugen": "^3.0.0-alpha.6",
-    "@natlibfi/fixura": "^4.0.0-alpha.13",
+    "@natlibfi/fixugen": "next",
+    "@natlibfi/fixura": "next",
     "cross-env": "^7.0.3",
     "eslint": "^9.34.0",
     "esbuild": "^0.25.9"
