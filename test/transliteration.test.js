@@ -1,5 +1,6 @@
-import { expect } from 'chai';
-import { convertToLatin } from '../src/transliteration';
+import assert from 'node:assert';
+import {beforeEach, describe, it} from 'node:test';
+import { convertToLatin } from '../src/transliteration.js';
 
 const mapping = [
   ['А', 'а'],['A','a'],     ['Анапа', 'Anapa'],
@@ -86,10 +87,10 @@ const mappingUkr = [
 describe('Transliteration', function() {
 
   const testDefinitions = mapping.reduce((acc, item, i) => {
-    if (i%3 === 0) { 
-      acc.push({}); 
+    if (i%3 === 0) {
+      acc.push({});
     }
-    
+
     const current = acc[acc.length-1];
 
     switch(i%3) {
@@ -103,10 +104,10 @@ describe('Transliteration', function() {
 
   testDefinitions.forEach(test => {
     it(`converts ${test.from[0]} to ${test.to[0]} in ${test.word[0]} to ${test.word[1]}`, () => {
-      expect(convertToLatin(test.word[0]).result).to.equal(test.word[1]);
+      assert.equal(convertToLatin(test.word[0]).result, test.word[1]);
     });
     it(`converts ${test.from[1]} to ${test.to[1]} in ${test.word[0]} to ${test.word[1]}`, () => {
-      expect(convertToLatin(test.word[0]).result).to.equal(test.word[1]);
+      assert.equal(convertToLatin(test.word[0]).result, test.word[1]);
     });
 
   });
@@ -129,10 +130,10 @@ describe('Transliteration', function() {
 
   testDefinitionsUkr.forEach(test => {
     it(`converts UKR ${test.from[0]} to ${test.to[0]} in ${test.word[0]} to ${test.word[1]}`, () => {
-      expect(convertToLatin(test.word[0], 'ukr').result).to.equal(test.word[1]);
+      assert.equal(convertToLatin(test.word[0], 'ukr').result, test.word[1]);
     });
     it(`converts UKR ${test.from[1]} to ${test.to[1]} in ${test.word[0]} to ${test.word[1]}`, () => {
-      expect(convertToLatin(test.word[0], 'ukr').result).to.equal(test.word[1]);
+      assert.equal(convertToLatin(test.word[0], 'ukr').result, test.word[1]);
     });
 
   });
@@ -145,10 +146,10 @@ describe('Transliteration', function() {
     });
 
     it('adds warning to result', function() {
-      expect(conversion.warnings).to.include('Character A at position 0 was not cyrillic.');
+      assert.partialDeepStrictEqual(conversion.warnings, ['Character A at position 0 was not cyrillic.']);
     });
     it('converts the cyrillic characters', function() {
-      expect(conversion.result).to.equal('Anapa');
+      assert.equal(conversion.result, 'Anapa');
     });
   });
 });
