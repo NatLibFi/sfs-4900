@@ -1,10 +1,18 @@
 // Based on https://fi.wikipedia.org/wiki/Ven%C3%A4j%C3%A4n_translitterointi and https://fi.wikipedia.org/wiki/Ukrainan_translitterointi
 
-const consonants = ['б', 'в', 'г', 'ґ', 'д', 'ж', 'з', 'к', 'л', 'м', 'н', 'п', 'р', 'с', 'т', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'Б', 'В', 'Г', 'Ґ', 'Д', 'Ж', 'З', 'К', 'Л', 'М', 'Н', 'П', 'Р', 'С', 'Т', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ'];
+export type Lang = 'rus' | 'ukr';
 
-const characters = ['А', 'а', 'Б', 'б', 'В', 'в', 'Г', 'г', 'Ґ', 'ґ', 'Д', 'д', 'Е', 'е', 'E', 'e', 'Ё', 'ё', 'Ё', 'ё', 'Є', 'є', 'Ж', 'ж', 'З', 'з', 'И', 'и', 'И', 'и', 'І', 'і', 'Ї', 'ї', 'Й', 'й', 'Й', 'й', 'Й', 'й', 'К', 'к', 'Л', 'л', 'М', 'м', 'Н', 'н', 'О', 'о', 'П', 'п', 'Р', 'р', 'С', 'с', 'Т', 'т', 'У', 'у', 'Ф', 'ф', 'Х', 'х', 'Ц', 'ц', 'Ч', 'ч', 'Ш', 'ш', 'Щ', 'щ', 'Ъ', 'ъ', 'Ы', 'ы', 'Ь', 'ь', 'Э', 'э', 'Ю', 'ю', 'Я', 'я', '’'];
+export interface ConversionResult {
+  from: string;
+  result: string;
+  warnings: string[];
+}
 
-const map = {
+const consonants: string[] = ['б', 'в', 'г', 'ґ', 'д', 'ж', 'з', 'к', 'л', 'м', 'н', 'п', 'р', 'с', 'т', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'Б', 'В', 'Г', 'Ґ', 'Д', 'Ж', 'З', 'К', 'Л', 'М', 'Н', 'П', 'Р', 'С', 'Т', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ'];
+
+const characters: string[] = ['А', 'а', 'Б', 'б', 'В', 'в', 'Г', 'г', 'Ґ', 'ґ', 'Д', 'д', 'Е', 'е', 'E', 'e', 'Ё', 'ё', 'Ё', 'ё', 'Є', 'є', 'Ж', 'ж', 'З', 'з', 'И', 'и', 'И', 'и', 'І', 'і', 'Ї', 'ї', 'Й', 'й', 'Й', 'й', 'Й', 'й', 'К', 'к', 'Л', 'л', 'М', 'м', 'Н', 'н', 'О', 'о', 'П', 'п', 'Р', 'р', 'С', 'с', 'Т', 'т', 'У', 'у', 'Ф', 'ф', 'Х', 'х', 'Ц', 'ц', 'Ч', 'ч', 'Ш', 'ш', 'Щ', 'щ', 'Ъ', 'ъ', 'Ы', 'ы', 'Ь', 'ь', 'Э', 'э', 'Ю', 'ю', 'Я', 'я', '’'];
+
+const map: Record<string, string> = {
   'А': 'A', // Both
   'а': 'a',
   'Б': 'B', // Both
@@ -92,16 +100,21 @@ const map = {
   '’': '' // UKR only
 };
 
-function createConverter(word, lang = 'rus') { // lang: 'rus' and 'ukr' supported
-  const warnings = [];
+interface Converter {
+  warnings: string[];
+  convertCharacter: (char: string, i: number) => string;
+}
+
+function createConverter(word: string, lang: Lang = 'rus'): Converter {
+  const warnings: string[] = [];
   //console.log(`LANG: ${lang}`); // eslint-disable-line no-console
 
-  function eOrJe(char, previousCharacter) {
+  function eOrJe(char: string, previousCharacter?: string): string {
     if (lang === 'ukr') {
       return char === 'Е' ? 'E' : 'e';
     }
     if (isConsonant(previousCharacter)) {
-      if (['Ъ', 'Ь', 'ъ', 'ь'].includes(previousCharacter)) {
+      if (includesAny(['Ъ', 'Ь', 'ъ', 'ь'], previousCharacter)) {
         return char === 'Е' ? 'Je' : 'je';
       }
       return char === 'Е' ? 'E' : 'e';
@@ -111,25 +124,25 @@ function createConverter(word, lang = 'rus') { // lang: 'rus' and 'ukr' supporte
     return char === 'Е' ? 'Je' : 'je';
   }
 
-  function gOrH(char) {
+  function gOrH(char: string): string {
     if (lang === 'ukr') {
       return char === 'Г' ? 'H' : 'h';
     }
 
     return char === 'Г' ? 'G' : 'g';
   }
-  function iOrJ(char, previousCharacter, isFirstCharacter, isLastCharacter) {
+  function iOrJ(char: string, previousCharacter: string | undefined, isFirstCharacter: boolean, isLastCharacter: boolean): string {
     if (isFirstCharacter) { // Both RUS and UKR
       return char === 'Й' ? 'J' : 'j';
     }
 
-    if (lang === 'ukr' && ['І', 'і'].includes(previousCharacter)) {
+    if (lang === 'ukr' && includesAny(['І', 'і'], previousCharacter)) {
       if (isLastCharacter) {
         return '';
       }
       return char === 'Й' ? 'J' : 'j';
     }
-    if (lang === 'rus' && ['и', 'И'].includes(previousCharacter)) {
+    if (lang === 'rus' && includesAny(['и', 'И'], previousCharacter)) {
       if (isLastCharacter) {
         return '';
       }
@@ -138,7 +151,7 @@ function createConverter(word, lang = 'rus') { // lang: 'rus' and 'ukr' supporte
     return char === 'Й' ? 'I' : 'i';
   }
 
-  function convertCharacter(char, i) {
+  function convertCharacter(char: string, i: number): string {
     const previousCharacter = word[i - 1];
     const nextCharacter = word[i + 1];
 
@@ -153,7 +166,7 @@ function createConverter(word, lang = 'rus') { // lang: 'rus' and 'ukr' supporte
     }
 
     if (['Ё', 'ё'].includes(char)) { // RUS only
-      if (['ж', 'ч', 'ш', 'щ', 'Ж', 'Ч', 'Ш', 'Щ'].includes(previousCharacter)) {
+      if (includesAny(['ж', 'ч', 'ш', 'щ', 'Ж', 'Ч', 'Ш', 'Щ'], previousCharacter)) {
         return previousCharacter === 'Ё' ? 'O' : 'o';
       }
       return previousCharacter === 'Ё' ? 'Jo' : 'jo';
@@ -163,7 +176,7 @@ function createConverter(word, lang = 'rus') { // lang: 'rus' and 'ukr' supporte
       if (lang === 'ukr') {
         return char === 'И' ? 'Y' : 'y';
       }
-      if (['Ь', 'ь'].includes(previousCharacter)) {
+      if (includesAny(['Ь', 'ь'], previousCharacter)) {
         return char === 'И' ? 'Ji' : 'ji';
       }
       return char === 'И' ? 'I' : 'i';
@@ -185,7 +198,7 @@ function createConverter(word, lang = 'rus') { // lang: 'rus' and 'ukr' supporte
 
     return convertCharacter2();
 
-    function convertCharacter2() {
+    function convertCharacter2(): string {
       const converted = map[char];
 
       if (converted === undefined) {
@@ -203,10 +216,10 @@ function createConverter(word, lang = 'rus') { // lang: 'rus' and 'ukr' supporte
   };
 }
 
-export function convertToLatin(word, lang = 'rus') {
+export function convertToLatin(word: string, lang: Lang = 'rus'): ConversionResult {
   const converter = createConverter(word, lang);
 
-  const convertedWord = word.split('').map(converter.convertCharacter).join('');
+  const convertedWord = word.split('').map((char, i) => converter.convertCharacter(char, i)).join('');
 
   return {
     from: word,
@@ -215,6 +228,10 @@ export function convertToLatin(word, lang = 'rus') {
   };
 }
 
-function isConsonant(char) {
-  return consonants.includes(char);
+function isConsonant(char?: string): boolean {
+  return char !== undefined && consonants.includes(char);
+}
+
+function includesAny(list: string[], value?: string): boolean {
+  return value !== undefined && list.includes(value);
 }
