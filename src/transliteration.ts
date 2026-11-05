@@ -176,7 +176,7 @@ function createConverter(word: string, lang: Lang = 'rus'): Converter {
       if (lang === 'ukr') {
         return char === 'И' ? 'Y' : 'y';
       }
-      if (['Ь', 'ь'].includes(previousCharacter)) {
+      if (includesAny(['Ь', 'ь'], previousCharacter)) {
         return char === 'И' ? 'Ji' : 'ji';
       }
       return char === 'И' ? 'I' : 'i';
