@@ -40,8 +40,8 @@
     "lint": "eslint ./src",
     "lint:dev": "eslint --fix ./src",
     "test": "npm run lint && npm run test:base",
-    "test:base": "tsx --test --test-force-exit --experimental-test-coverage --test-reporter=spec test/*.test.ts",
-    "dev:test": "cross-env DEBUG=@natlibfi/* NODE_ENV=test tsx --watch --test --experimental-test-coverage --test-reporter=spec src/*.test.ts src/**/*.test.ts"
+    "test:base": "node --test --test-force-exit --experimental-test-coverage --test-reporter=spec './test/*.test.js'",
+    "dev:test": "cross-env DEBUG=@natlibfi/* NODE_ENV=test node --watch --test --experimental-test-coverage --test-reporter=spec './src/*.test.js' './src/**/*.test.js'"
   },
   "devDependencies": {
     "@natlibfi/fixugen": "^4.0.0",
@@ -50,7 +50,6 @@
     "cross-env": "^10.1.0",
     "esbuild": "^0.28.2",
     "eslint": "^10.9.1",
-    "tsx": "^4.23.15",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.39.0"
   },
