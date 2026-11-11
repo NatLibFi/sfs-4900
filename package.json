@@ -35,7 +35,8 @@
   },
   "scripts": {
     "prepare": "npm run build",
-    "build": "esbuild \"src/*.js\" --sourcemap --platform=node --outdir=dist",
+    "build": "esbuild \"src/*.ts\" --sourcemap --platform=node --outdir=dist",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint ./src",
     "lint:dev": "eslint --fix ./src",
     "test": "npm run lint && npm run test:base",
@@ -43,10 +44,21 @@
     "dev:test": "cross-env DEBUG=@natlibfi/* NODE_ENV=test node --watch --test --experimental-test-coverage --test-reporter=spec './src/*.test.js' './src/**/*.test.js'"
   },
   "devDependencies": {
-    "@natlibfi/fixugen": "^3.0.1",
-    "@natlibfi/fixura": "^4.0.0",
+    "@natlibfi/fixugen": "^4.0.0",
+    "@natlibfi/fixura": "^5.0.0",
+    "@types/node": "^24.0.0",
     "cross-env": "^10.1.0",
     "esbuild": "^0.28.2",
-    "eslint": "^10.9.1"
+    "eslint": "^10.9.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.2"
+  },
+  "overrides": {
+    "eslint": {
+      "minimatch": "^11.0.4"
+    },
+    "typescript-eslint": {
+      "minimatch": "^11.0.4"
+    }
   }
 }
