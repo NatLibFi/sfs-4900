@@ -1,12 +1,25 @@
+import tseslint from 'typescript-eslint';
+
 // Eslint configuration object for src
 const configSrc = {
   files: [
-    "src/*"
+    "src/**/*.ts"
   ],
   linterOptions: {
     reportUnusedDisableDirectives: true,
   },
+  languageOptions: {
+    parser: tseslint.parser,
+    parserOptions: {
+      projectService: true,
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+  plugins: {
+    "@typescript-eslint": tseslint.plugin,
+  },
   rules: {
+    ...tseslint.configs.recommended[0].rules,
     "no-console": "warn",
     "eqeqeq": ["error", "always"],
     "no-const-assign": "error",
@@ -26,7 +39,8 @@ const configSrc = {
         "checkForEach": false
       }
     ],
-    "no-unused-vars": [
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
       "error",
       {
         "argsIgnorePattern": "next"
