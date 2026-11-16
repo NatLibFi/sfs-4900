@@ -49,16 +49,16 @@
     "@types/node": "^24.0.0",
     "cross-env": "^10.1.0",
     "esbuild": "^0.28.2",
-    "eslint": "^10.9.1",
+    "eslint": "^10.14.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2"
   },
   "overrides": {
     "eslint": {
-      "minimatch": "^11.0.4"
+      "minimatch": "^11.0.8"
     },
     "typescript-eslint": {
-      "minimatch": "^11.0.4"
+      "minimatch": "^11.0.8"
     }
   }
 }
